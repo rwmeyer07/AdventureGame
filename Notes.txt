@@ -1,0 +1,5 @@
+//
+npm install readline-sync
+node src/AdventureGame.js
+
+git remote add origin https://github.com/rwmeyer07/AdventureGame.git
