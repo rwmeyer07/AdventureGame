@@ -3,3 +3,10 @@ npm install readline-sync
 node src/AdventureGame.js
 
 git remote add origin https://github.com/rwmeyer07/AdventureGame.git
+
+•	To save future changes, you'll use these three commands:
+git add .
+git commit -m "Describe your changes here"
+git push
+
+
