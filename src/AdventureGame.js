@@ -38,6 +38,31 @@ const sword = {
     description: "A sturdy blade for combat"
 };
 
+const shield = {
+    name: "Wooden Shield",
+    type: "armor",
+    value: 8,    // Cost in gold
+    effect: 5,   // protection amount
+    description: "Reduces damage taken in combat"
+};
+
+const advancedweapon = {
+    name: "Steel Sword",
+    type: "weapon",
+    value: 10,    // Cost in gold
+    effect: 20,   // Damage amount
+    description: "An advanced blade for combat"
+};
+
+const advancedarmor = {
+    name: "Iron Shield",
+    type: "armor",
+    value: 8,    // Cost in gold
+    effect: 10,   // protection amount
+    description: "Reduces additional damage taken in combat"
+};
+
+
 // Create empty inventory array (from previous lab)
 let inventory = [];  // Will now store item objects instead of strings
 
@@ -134,20 +159,62 @@ function hasItemType(type) {
  * Checks if player has weapon and manages combat results
  * @returns {boolean} true if player wins, false if they retreat
  */
+
 function handleCombat() {
-    // Updated to check for item type instead of specific string
-    if (hasItemType("weapon")) {
-        // Find the weapon to get its properties
-        let weapon = inventory.find(item => item.type === "weapon");
-        console.log("You attack with your " + weapon.name + "!");
-        console.log("You deal " + weapon.effect + " damage!");
-        console.log("Victory! You found 10 gold!");
-        playerGold += 10;
-        return true;
+    if (isDragon == true) {
+        const inCheckWeapons = inventory.filter(item => 
+            item.name === 'Steel Sword').length;
+        const inCheckArmor = inventory.filter(item => 
+            item.name === 'Iron Shield').length;
+        console.log("inCheckWeapons : " + inCheckWeapons +
+            ", inCheckArmor : " + inCheckArmor);
+        if (inCheckWeapons > 0 && inCheckArmor > 0) {
+            const maxWeaponEffect = Math.max(...getItemsByType("weapon").map(item => 
+                item.effect));
+            console.log("maxWeaponEffect " + maxWeaponEffect)
+            let weapon = inventory.find(item => 
+                item.type === "weapon" && item.effect == maxWeaponEffect);
+            const maxArmorEffect = Math.max(...getItemsByType("armor").map(item => 
+                item.effect));
+            console.log("maxArmorEffect " + maxArmorEffect)
+            let armor = inventory.find(item => 
+                item.type === "armor" && item.effect == maxArmorEffect);
+            console.log("You attack with your " + weapon.name + "!");
+            console.log("You attack with your " + armor.name + "!");
+            console.log("You deal " + weapon.effect + " damage!");
+            console.log("Victory! You found 10 gold!");
+            playerGold += 10;
+            return true;
+        }
+        else {
+            console.log("Without a weapon, you must retreat!");
+            //updateHealth(-20);
+            return false;
+            }
     } else {
-        console.log("Without a weapon, you must retreat!");
-        updateHealth(-20);
-        return false;
+        if (hasItemType("weapon")) {
+            // Find the weapon to get its properties
+            const maxWeaponEffect = Math.max(...getItemsByType("weapon").map(item => 
+                item.effect));
+            console.log("maxWeaponEffect " + maxWeaponEffect)
+            let weapon = inventory.find(item => 
+                item.type === "weapon" && item.effect == maxWeaponEffect);
+            const maxArmorEffect = Math.max(...getItemsByType("armor").map(item => 
+                item.effect));
+            console.log("maxArmorEffect " + maxArmorEffect)
+            let armor = inventory.find(item => 
+                item.type === "armor" && item.effect == maxArmorEffect);
+            console.log("You attack with your " + weapon.name + "!");
+            console.log("You attack with your " + armor.name + "!");
+            console.log("You deal " + weapon.effect + " damage!");
+            console.log("Victory! You found 10 gold!");
+            playerGold += 10;
+            return true;
+        } else {
+            console.log("Without a weapon, you must retreat!");
+            updateHealth(-20);
+            return false;
+        }
     }
 }
 
@@ -181,6 +248,17 @@ function updateHealth(amount) {
  * Handles using items like potions
  * @returns {boolean} true if item was used successfully, false if not
  */
+function getItemsByType(type) {
+    return inventory.filter(item => item.type == type);
+}
+
+function getBestItem(type) {
+    const maxValue = Math.max(...getItemsByType(type).map(item => 
+        item.effect));
+    //console.log("maxValue : " + maxValue);        
+    return getItemsByType(type).filter(item => 
+        item.effect === maxValue);
+}
 function useItem() {
     if (inventory.length === 0) {
         console.log("\nYou have no items!");
@@ -270,6 +348,25 @@ function buyFromMarket() {
     } else {
         console.log("\nMerchant: 'No gold, no potion!'");
     }
+}
+
+// ===========================
+// Equipment Checking Functions
+// Functions that handle equipment checks
+// ===========================
+
+function hasGoodEquipment() {
+    const inCheckWeapons = inventory.filter(item => 
+        item.name === 'Steel Sword').length;
+    const inCheckArmor = inventory.filter(item => 
+        item.type === 'armor').length;
+    console.log("inCheckWeapons : " + inCheckWeapons +
+        ", inCheckArmor : " + inCheckArmor
+    );
+    if (inCheckWeapons > 0 && inCheckArmor > 0)
+        { return true }
+    else
+        { return false }
 }
 
 // ===========================
